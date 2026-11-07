@@ -4,13 +4,17 @@
 #include <passiveTCP.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "http.h"
+#include <netinet/in.h>
 
 int service()
 {
 #define MAX_EVENTS 10
     struct epoll_event ev, events[MAX_EVENTS];
-    int sd, nsd, fd, nread, epollfd, nfds, n;
+    int sd, nsd, fd, nread, epollfd, nfds, n, flags;
     char buffer[1024];
+    socklen_t l;
+    struct sockaddr_in cltAddr;
 
     // instancia de epoll
     epollfd = epoll_create1(0);
@@ -44,17 +48,34 @@ int service()
             exit(EXIT_FAILURE);
         }
         // itera únicamente sobre los eventos listos
-        for (n = 0; n < nfds; ++n)
+        for (int i = 0; i < nfds; ++i)
         {
             // si el evento es del socket pasivo, se acepta la conexión entrante
-            if (events[n].data.fd == sd)
+            if (events[i].data.fd == sd)
             {
-                nsd = accept(sd, NULL, NULL);
+                nsd = accept(sd, (struct sockaddr *)&cltAddr, &l);
                 if (nsd < 0)
                 {
                     perror("Error en accept");
                     exit(EXIT_FAILURE);
                 }
+
+                // configuracion del socket no bloqueante
+                flags = fcntl(nsd, F_GETFL, 0);
+                fcntl(nsd, F_SETFL, flags | O_NONBLOCK);
+
+                // configuracion del evento para el socket de conexión
+                ev.events = EPOLLIN;
+                ev.data.fd = nsd;
+                if (epoll_ctl(epollfd, EPOLL_CTL_ADD, nsd, &ev) == -1)
+                {
+                    perror("Error en epoll_ctl");
+                    exit(EXIT_FAILURE);
+                }
+            }
+            else
+            {
+                // seccion para el procesamiento de sockets conectados
 
                 // procesaminento del socket de conexión
                 n = read(nsd, buffer, sizeof(buffer));
@@ -66,26 +87,10 @@ int service()
                 buffer[n] = '\0';
 
                 // seccion de parsing para extraer el nombre del archivo
-            }
-            else
-            // seccion para el procesamiento de sockets conectados
-            {
-            }
-        }
+                parsing_http(buffer);
 
-        /*fd = open(filename, O_RDONLY);
-        if (fd < 0)
-        {
-            perror("Error en open");
-            exit(EXIT_FAILURE);
+                close(nsd);
+            }
         }
-        while (nread = read(fd, buffer, sizeof(buffer)))
-        {
-            write(nsd, buffer, nread);
-        }
-
-        close(fd);
-        close(nsd);*/
     }
-    close(nsd);
 }
