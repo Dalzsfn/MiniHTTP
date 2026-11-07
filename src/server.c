@@ -53,6 +53,7 @@ int service()
             // si el evento es del socket pasivo, se acepta la conexión entrante
             if (events[i].data.fd == sd)
             {
+                l = sizeof(cltAddr);
                 nsd = accept(sd, (struct sockaddr *)&cltAddr, &l);
                 if (nsd < 0)
                 {
@@ -76,20 +77,26 @@ int service()
             else
             {
                 // seccion para el procesamiento de sockets conectados
-
-                // procesaminento del socket de conexión
-                n = read(nsd, buffer, sizeof(buffer));
+                int client_fd = events[i].data.fd;
+                n = read(client_fd, buffer, sizeof(buffer));
                 if (n < 0)
                 {
                     perror("Error en read");
                     exit(EXIT_FAILURE);
+                    epoll_ctl(epollfd, EPOLL_CTL_DEL, client_fd, NULL);
+                    close(client_fd);
                 }
-                buffer[n] = '\0';
 
-                // seccion de parsing para extraer el nombre del archivo
-                parsing_http(buffer);
+                else
+                {
+                    buffer[n] = '\0';
 
-                close(nsd);
+                    // seccion de parsing para extraer el nombre del archivo
+                    parsing_http(buffer);
+
+                    epoll_ctl(epollfd, EPOLL_CTL_DEL, client_fd, NULL);
+                    close(client_fd);
+                }
             }
         }
     }
