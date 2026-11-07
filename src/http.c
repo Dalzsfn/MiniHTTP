@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <regex.h>
-
+#include <files.h>
 int parsing_http(char request[])
 {
-    /* estructura de peticion:
-    request: GET / HTTP/1.1
+    /* 200 OK
+    request: GET /index HTTP/1.1
     Host: localhost:8080
     Connection: keep-alive
+    Cache-Control: max-age=0
     sec-ch-ua: "Not:A-Brand";v="8", "Chromium";v="156", "Brave";v="156"
     sec-ch-ua-mobile: ?0
     sec-ch-ua-platform: "Linux"
@@ -23,29 +23,36 @@ int parsing_http(char request[])
     Accept-Encoding: gzip, deflate, br, zstd
     Accept-Language: en-US,en;q=0.5
     */
-    regex_t regex;
-    regmatch_t matches[2];
-    const char *pattern = "^GET\\s";
-    if (regcomp(&regex, pattern, REG_EXTENDED))
-    {
-        fprintf(stderr, "Error compilando regex\n");
-        return EXIT_FAILURE;
-    }
 
-    int result = regexec(&regex, request, 2, matches, 0);
-    if (!result)
+    char header[] =
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: text/html\r\n"
+        "Connection: close\r\n\r\n";
+
+    char metodo[16];
+    char ruta[256];
+    char protocolo[16];
+
+    int extraidos = sscanf(request, "%s %s %s", metodo, ruta, protocolo);
+    if (extraidos == 3)
     {
-        printf("Request is a GET request\n");
-    }
-    else if (result == REG_NOMATCH)
-    {
-        printf("Request is not a GET request\n");
+        if (strcmp(metodo, "GET") != 0)
+        {
+            printf("405: Method not allowed (%s)\n", metodo);
+            return -1;
+        }
+        if (strcmp(protocolo, "HTTP/1.1") != 0)
+        {
+            printf("400: Bad Request (%s)\n", protocolo);
+            return -1;
+        }
+        printf("Solicitud HTTP válida: %s %s %s\n", metodo, ruta, protocolo);
+        obtener_archivo(ruta);
     }
     else
     {
-        perror("Regex match failed\n");
-        return EXIT_FAILURE;
+        printf("sscanf salió mal\n");
+        return -1;
     }
-
-    regfree(&regex);
+    return 0;
 }

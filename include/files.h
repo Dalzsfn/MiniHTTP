@@ -1,0 +1,1 @@
+int obtener_archivo(char ruta[]);
