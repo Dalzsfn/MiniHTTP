@@ -90,10 +90,8 @@ int service()
                 else
                 {
                     buffer[n] = '\0';
-
                     // seccion de parsing para extraer el nombre del archivo
-                    parsing_http(buffer);
-
+                    parsing_http(buffer, client_fd);
                     epoll_ctl(epollfd, EPOLL_CTL_DEL, client_fd, NULL);
                     close(client_fd);
                 }

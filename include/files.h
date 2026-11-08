@@ -1,1 +1,1 @@
-int obtener_archivo(char ruta[]);
+int obtener_archivo(char ruta[], int client_fd);

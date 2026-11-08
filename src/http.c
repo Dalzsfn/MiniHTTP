@@ -1,9 +1,11 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <files.h>
-int parsing_http(char request[])
+#include <unistd.h>
+
+int parsing_http(char request[], int client_fd)
 {
+    // ejemplo de solicitud HTTP
     /* 200 OK
     request: GET /index HTTP/1.1
     Host: localhost:8080
@@ -24,6 +26,7 @@ int parsing_http(char request[])
     Accept-Language: en-US,en;q=0.5
     */
 
+    // cabecera estática de respuesta
     char header[] =
         "HTTP/1.1 200 OK\r\n"
         "Content-Type: text/html\r\n"
@@ -47,7 +50,10 @@ int parsing_http(char request[])
             return -1;
         }
         printf("Solicitud HTTP válida: %s %s %s\n", metodo, ruta, protocolo);
-        obtener_archivo(ruta);
+        printf("Ruta: %s\n", ruta);
+
+        write(client_fd, header, strlen(header));
+        obtener_archivo(ruta, client_fd);
     }
     else
     {

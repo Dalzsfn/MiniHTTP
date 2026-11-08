@@ -1,1 +1,1 @@
-int parsing_http(char request[]);
+int parsing_http(char request[], int client_fd);
