@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Academico Universitario</title>
+    <link rel="stylesheet" href="css/estilos.css">
+
+    </head>
+
+    <body>
+        <header class="encabezado">
+            <h1>Portal Académico Universitario</h1>
+                <p>Aprendizaje. Innovación y tecnologías</p>
+
+        </header>
+
+        <nav class="navegacion" aria-label="Menú principal">
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="saludar.html">Cursos</a></li>
+                <li><a href="#noticias">Noticias</a></li>
+                <li><a href="#horario">Horario</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="inicio" class="bienvenida">
+                <h2>Bienvenidos al portal Académico</h2>
+                <p>
+                    Este espacio está diseñado para compartir 
+                    información sobre asignaturas
+                </p>
+                <img src="img/epn.jpeg"
+                alt="Instalacion del campus Universitario"
+                class="imagen-principal">
+            </section>
+
+
+            <section id="cursos" class="seccion-cursos">
+                <h2>Nuestras asignaturas</h2>
+                <div class="contenedor-cursos">
+                    <article class="tarjeta">
+                    <h3>Desarrollo web</h3>
+                    <p>Introduccion a HTML, CSS y Javascript</p>
+                    <a href="#contacto">Más información</a>
+                    </article>
+
+                    <article class="tarjeta">
+                    <h3>Bases de datos</h3>
+                    <p>Modelo relacional y consultas SQL</p>
+                    <a href="#contacto">Más información</a>
+                    </article>
+
+                    <article class="tarjeta">
+                    <h3>Ingeniería de software</h3>
+                    <p>Requisitos, arquitectura y pruebas</p>
+                    <a href="#contacto">Más información</a>
+                    </article>
+                </div>
+            </section>
+
+            <section id="noticias" class="noticias">
+                <h2>Noticias académicas</h2>
+                <article>
+                    <h3>Nuevo laboratorio de desarrollo web</h3>
+                    <p>Los estudiantes desarrollan proyectos con tecnologías web modernas</p>
+                    <time datetime="2026-10-15">15 de octubre de 2026</time>
+                </article>
+
+            </section>
+
+            <section id="horario" class="seccion-horario">
+                <h2>Horario académico</h2>
+                <div class="tabla-responsive" role="region" aria-label="Horario académico" tabindex="0">
+                    <table>
+                        <caption>Horario académico semanal</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Lunes</th>
+                                <th scope="col">Martes</th>
+                                <th scope="col">Miércoles</th>
+                                <th scope="col">Jueves</th>
+                                <th scope="col">Viernes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Desarrollo web</td>
+                                <td>Bases de datos</td>
+                                <td>Desarrollo web</td>
+                                <td>Ingeniería de software</td>
+                                <td>Bases de datos</td>
+                            </tr>
+                            <tr>
+                                <td>Ingeniería de software</td>
+                                <td>Desarrollo web</td>
+                                <td>Bases de datos</td>
+                                <td>Desarrollo web</td>
+                                <td>Ingeniería de software</td>
+                            </tr>
+                            <tr>
+                                <td>Bases de datos</td>
+                                <td>Ingeniería de software</td>
+                                <td>Ingeniería de software</td>
+                                <td>Bases de datos</td>
+                                <td>Desarrollo web</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="laboratorio-animacion">
+                <h2>Laboratorio de animaciones</h2>
+                <p>Ejemplo de movimiento con CSS.</p>
+                <div class="escenario">
+                    <div class="pelota"></div>
+                </div>
+            </section>
+
+            <section id="contacto" class="contacto">
+                <h2>Contactos</h2>
+                <form action="https://httpbin.org/post" method="post">
+
+                    <label for="nombre">Nombre Completo</label> <br>
+                    <input type="text" id="nombre" name="nombre" required><br>
+
+                    <label for="correo">Correo electrónico</label><br>
+                    <input type="email" id="correo" name="correo" required><br>
+
+                    <label for="mensaje">Mensaje</label><br>
+                    <textarea id="mensaje" name="mensaje" rows="1" required></textarea><br>
+
+                <button type="submit">Enviar mensaje</button>
+
+                </form>
+            </section>
+        </main>
+
+        <footer class="pie-pagina">
+            <p>
+                &copy; 2026 Portal Académico Universitario.
+                Todos los derechos reservados.
+            </p>
+        </footer>
+    </body>
+</html>

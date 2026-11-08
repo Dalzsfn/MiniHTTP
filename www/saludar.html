@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Academico Universitario</title>
+    <link rel="stylesheet" href="css/estilos.css">
+
+    </head>
+
+    <body>
+        <header class="encabezado">
+            <h1>Portal Académico Universitario</h1>
+                <p>Aprendizaje. Innovación y tecnologías</p>
+
+        </header>
+
+        <nav class="navegacion" aria-label="Menú principal">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="#cursos">Cursos</a></li>
+                <li><a href="#noticias">Noticias</a></li>
+                <li><a href="#horario">Horario</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="inicio" class="bienvenida">
+                <h2>Bienvenidos Ja S</h2>
+
+                <p id="demo1">
+                </p>
+
+                <p id="demo">
+                </p>
+                <br>
+                <button type="button" onclick="document.getElementById('demo').innerHTML= Date()">
+                    Click me
+                </button>
+            </br>
+                
+                <button type= "button" onclick="saludar()">Saludar</button>
+
+                <p id="resultado">
+                </p>
+            </section>
+
+            <section id="inicio" class="bienvenida">
+                <h2> Suma de números</h2>
+                <input type="number" id="num1" placeholder="numero 1";>
+                <input type="number" id="num2" placeholder="numero 2 ";>
+                <button onclick="sumar()">Sumar</button>
+                <p id="resultadoSuma"></p>
+            </section>
+
+            <section id="inicio" class="bienvenida">
+                <h2> Tabla de multiplicar</h2>
+
+                <input type="number" id="num" placeholder="numero a multiplicar";>
+                <button onclick="multiplicar()">Multiplicar</button>
+                <p id="resultadosMultiplicacion"></p>
+            </section>
+                <script src="script.js"></script>
+
+            <script>
+                let persona = {
+                    nombre : "David",
+                    saludar : function(){
+                        return "hola " + this.nombre;
+
+                    }
+                };
+                console.log(persona.saludar());
+                document.getElementById("demo1").innerHTML = "mensaje: "+ persona.saludar();
+            </script>
+        </main>
