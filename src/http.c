@@ -2,6 +2,7 @@
 #include <string.h>
 #include <files.h>
 #include <unistd.h>
+#include <mime.h>
 
 int parsing_http(char request[], int client_fd)
 {
@@ -25,35 +26,66 @@ int parsing_http(char request[], int client_fd)
     Accept-Encoding: gzip, deflate, br, zstd
     Accept-Language: en-US,en;q=0.5
     */
-
-    // cabecera estática de respuesta
-    char header[] =
-        "HTTP/1.1 200 OK\r\n"
-        "Content-Type: text/html\r\n"
-        "Connection: close\r\n\r\n";
-
+    int fd, nread;
+    char header[256];
+    const char *content_type;
     char metodo[16];
     char ruta[256];
     char protocolo[16];
+    char mensaje_estado[32];
+    char buff[1024];
+    int codigo_estado;
 
     int extraidos = sscanf(request, "%s %s %s", metodo, ruta, protocolo);
     if (extraidos == 3)
     {
+        printf("Solicitud HTTP: %s %s %s\n", metodo, ruta, protocolo);
+        printf("Ruta: %s\n", ruta);
         if (strcmp(metodo, "GET") != 0)
         {
-            printf("405: Method not allowed (%s)\n", metodo);
+            codigo_estado = 405;
             return -1;
         }
         if (strcmp(protocolo, "HTTP/1.1") != 0)
         {
             printf("400: Bad Request (%s)\n", protocolo);
+            codigo_estado = 400;
             return -1;
         }
-        printf("Solicitud HTTP válida: %s %s %s\n", metodo, ruta, protocolo);
-        printf("Ruta: %s\n", ruta);
+        fd = obtener_archivo(ruta, client_fd);
+        if (fd == -1)
+        {
+            codigo_estado = 404;
+            return -1;
+        }
 
+        // faltan los otros códigos de estado
+        switch (codigo_estado)
+        {
+        case 400:
+            strcpy(mensaje_estado, "Bad Request");
+            return -1;
+        case 404:
+            strcpy(mensaje_estado, "Not Found");
+            return -1;
+        case 405:
+            strcpy(mensaje_estado, "Method Not Allowed");
+            return -1;
+        default:
+            strcpy(mensaje_estado, "OK");
+            break;
+        }
+
+        content_type = obtener_content_type(ruta);
+
+        // falta header para error
+        snprintf(header, sizeof(header), "HTTP/1.1 %s %s\r\nContent-Type: %s\r\nConnection: close\r\n\r\n", codigo_estado, mensaje_estado, content_type);
         write(client_fd, header, strlen(header));
-        obtener_archivo(ruta, client_fd);
+        while ((nread = read(fd, buff, sizeof(buff))) > 0)
+        {
+            write(client_fd, buff, nread);
+        }
+        close(fd);
     }
     else
     {
