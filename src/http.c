@@ -48,27 +48,27 @@ int parsing_http(char request[], int client_fd)
     switch (codigo_estado)
     {
     case 400:
-        strcpy(mensaje_estado, "Bad Request");
+        snprintf(mensaje_estado, sizeof(mensaje_estado), "Bad Request");
         body = "400 Bad Request";
         break;
     case 403:
-        strcpy(mensaje_estado, "Forbidden");
+        snprintf(mensaje_estado, sizeof(mensaje_estado), "Forbidden");
         body = "403 Forbidden";
         break;
     case 404:
-        strcpy(mensaje_estado, "Not Found");
+        snprintf(mensaje_estado, sizeof(mensaje_estado), "Not Found");
         body = "404 Not Found";
         break;
     case 405:
-        strcpy(mensaje_estado, "Method Not Allowed");
+        snprintf(mensaje_estado, sizeof(mensaje_estado), "Method Not Allowed");
         body = "405 Method Not Allowed";
         break;
     case 500:
-        strcpy(mensaje_estado, "Internal Server Error");
+        snprintf(mensaje_estado, sizeof(mensaje_estado), "Internal Server Error");
         body = "500 Internal Server Error";
         break;
     default:
-        strcpy(mensaje_estado, "OK");
+        snprintf(mensaje_estado, sizeof(mensaje_estado), "OK");
         body = "200 OK";
         break;
     }
