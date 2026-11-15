@@ -1,14 +1,22 @@
 #include <fcntl.h>
 #include <stdio.h>
-#include <unistd.h>
+#include <stdlib.h>
 
-int obtener_archivo(char ruta[], int client_fd)
+int obtener_archivo(char ruta[])
 {
     int fd;
-    char full_path[512];
-    snprintf(full_path, sizeof(full_path), "www%s", ruta);
-    fd = open(full_path, O_RDONLY);
-    printf("Abriendo archivo: %s\n", full_path);
+    char ruta_relativa[512];
+    snprintf(ruta_relativa, sizeof(ruta_relativa), "www/%s", ruta);
+    char *ruta_absoluta = realpath(ruta_relativa, NULL);
+    if (ruta_absoluta == NULL)
+    {
+        perror("Error al obtener la ruta absoluta");
+        return -1;
+    }
+
+    fd = open(ruta_absoluta, O_RDONLY);
+    printf("Abriendo archivo: %s\n", ruta_absoluta);
+    free(ruta_absoluta);
     if (fd == -1)
     {
         perror("Error al abrir el archivo");

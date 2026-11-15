@@ -29,7 +29,7 @@ int parsing_http(char request[], int client_fd)
     }
     else
     {
-        fd = obtener_archivo(ruta, client_fd);
+        fd = obtener_archivo(ruta);
         if (fd == -1)
         {
             if (errno == ENOENT)
