@@ -1,0 +1,1 @@
+int passiveTCP(const char *service, int qlen);
