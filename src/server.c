@@ -11,7 +11,7 @@ int service()
 {
 #define MAX_EVENTS 10
     struct epoll_event ev, events[MAX_EVENTS];
-    int sd, nsd, fd, nread, epollfd, nfds, n, flags;
+    int sd, nsd, epollfd, nfds, n, flags;
     char buffer[1024];
     socklen_t l;
     struct sockaddr_in cltAddr;
